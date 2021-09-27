@@ -1,0 +1,134 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: >
+  This clouformation template prepares development environment for pet clinic microservices app
+  User needs to select appropriate key name when launching the template.
+
+Parameters:
+  KeyPairName:
+    Description: Enter the name of the your existing Key Pair for SSH connection
+    Type: AWS::EC2::KeyPAir::KeyName
+    ConstrainDescription: Must be an existing EC2 key pair  
+
+Resources:
+  PetclinicSG:
+    Type: AWS::EC2:SecurityGroup
+    Properties:
+      GroupDescription: Enable HTTP and SSH petclinic microservices
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 22
+            ToPort: 22
+            CidrIP: 0.0.0.0./0
+          - IpProtocol: tcp
+            FromPort: 80
+            ToPort: 80
+            CidrIP: 0.0.0.0./0  
+            # There are ports used by petclinic app We'll deploy petclinic app in dev environment.
+            # We need to open the ports that used by the petclinic app. 
+            # But where we will get those ports?
+            # Ports are indicated in READ.md file for each micro servicess of the app
+            # Also, you can get these ports in docker-compose.yml file. 
+            # It contains all the configuration of containers that each microservices will run on.
+          - IpProtocol: tcp
+            FromPort: 8888
+            ToPort: 8888
+            CidrIP: 0.0.0.0./0  
+          - IpProtocol: tcp
+            FromPort: 8761
+            ToPort: 8761
+            CidrIP: 0.0.0.0./0  
+          - IpProtocol: tcp
+            FromPort: 8081
+            ToPort: 8081
+            CidrIP: 0.0.0.0./0  
+          - IpProtocol: tcp
+            FromPort: 8082
+            ToPort: 8082
+            CidrIP: 0.0.0.0./0  
+          - IpProtocol: tcp
+            FromPort: 8083
+            ToPort: 8083
+            CidrIP: 0.0.0.0./0 
+          - IpProtocol: tcp
+            FromPort: 8080
+            ToPort: 8080
+            CidrIP: 0.0.0.0./0 
+          - IpProtocol: tcp
+            FromPort: 9411
+            ToPort: 9411
+            CidrIP: 0.0.0.0./0 
+          - IpProtocol: tcp
+            FromPort: 9090
+            ToPort: 9090
+            CidrIP: 0.0.0.0./0 
+          - IpProtocol: tcp
+            FromPort: 7979
+            ToPort: 7979
+            CidrIP: 0.0.0.0./0  
+          
+          # Open the ports for Grafana / Prometheus   
+          - IpProtocol: tcp
+            FromPort: 3000
+            ToPort: 3000
+            CidrIP: 0.0.0.0./0  
+          # For oropeteus ports are defined in docker-compose file as 9091:9090 
+          # We must get only the port number on the left which is 9091!
+          - IpProtocol: tcp
+            FromPort: 9091
+            ToPort: 9091
+            CidrIP: 0.0.0.0./0  
+
+  # Launch Template
+  PetClinicLT:
+    Type: AWS::EC2:LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: ami-0915bcb5fa77e4892
+        InstanceType: t2.medium
+        KeyName: !Ref KeyPairName
+        SecurityGroupIds:
+          - !GetAtt PetclinicSG.FroupId
+        
+        # Add UseData to create the instance for required configuration, 
+        # settings, clone your repo and install all the necessary tools.
+        # At the end we'll change directory to petclinic-microservices and 
+        # with git fetch we"ll make all branches identical then change directory to dev branch 
+        UserData:
+          Fn::Base64: |
+            #! /bin/bash
+            yum update -y
+            hostnamectl set-hostname petclinic-dev-server
+            amazon-linux-extras install docker -y
+            systemctl start docker
+            systemctl enable docker
+            usermod -a -G docker ec2-user
+            curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o \ 
+            /usr/local/bin/docker-compose
+#Dont forget to update the Docker Compose version!!!!!
+            chmod +x /usr/local/bin/docker-compose
+            yum install git -y
+            yum install java-11-amazon-corretto -y
+            git clone https://github.com/ksz61/petclinic-microservices.git  
+# Don’t forget to change this your own remote repo!!!
+            cd petclinic-microservices
+            git fetch
+            git checkout dev  
+  PetClinicServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref PetClinicLT
+        Version: !GetAtt PetClinicLT.LatestVersionNumber
+      Tags: 
+        - Keys: name
+          Value: !Sub Petclinic App Dev Server ${AWS::StackName}
+          # Include StackName here so we can see which Stack this EC2 belongs to.
+
+Output:
+  PetClinicDNSName:
+    Description: PetClinic App Url
+    Value: !GetAtt PetClinicServer.PublicDnsName
+    # PetClinicServer.PublicDnsName gets public DNS name of the PetClinic Server this template creates.
+
+

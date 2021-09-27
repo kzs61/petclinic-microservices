@@ -13,7 +13,7 @@ services:
     container_name: discovery-server
     mem_limit: 512M
     depends_on:
-    - config-server
+      - config-server
     entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     ports:
      - 8761:8761
@@ -23,8 +23,8 @@ services:
     container_name: customers-service
     mem_limit: 512M
     depends_on:
-    - config-server
-    - discovery-server
+     - config-server
+     - discovery-server
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     ports:
     - 8081:8081

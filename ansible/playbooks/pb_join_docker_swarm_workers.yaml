@@ -20,7 +20,3 @@
     register: result_of_joining
 
   - debug: msg='{{ result_of_joining.stdout }}'
-
-    - debug:
-    when:
-      - enabled_tasks|bool  

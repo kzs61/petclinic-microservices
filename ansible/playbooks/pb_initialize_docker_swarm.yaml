@@ -14,6 +14,4 @@
           --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
           dockersamples/visualizer
 
-  - debug:
-    when:
-      - enabled_tasks|bool        
+      

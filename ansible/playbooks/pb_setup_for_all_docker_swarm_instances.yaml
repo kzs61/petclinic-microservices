@@ -63,7 +63,4 @@
       dest: /home/ec2-user/.docker/config.json
       owner: "ec2-user"
       mode: "g+rwx"
-
-    - debug:
-    when:
-      - enabled_tasks|bool      
+        

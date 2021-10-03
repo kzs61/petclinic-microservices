@@ -19,6 +19,5 @@
     shell: "{{ hostvars['grand_master']['worker_join'] }}"
     register: result_of_joining
 
-  # - debug: msg='{{ result_of_joining.stdout }}'
+  - debug: msg='{{ result_of_joining.stdout }}'
 
-  - debug: msg="{{ python_version.stdout }}"

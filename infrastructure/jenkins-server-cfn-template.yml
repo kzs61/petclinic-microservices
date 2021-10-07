@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: >
   This Cloudformation Template creates a Jenkins Server using JDK 11 on EC2 Instance.
   Jenkins Server is enabled with Git, Docker and Docker Compose,
-  AWS CLI Version 2, Python 3, Ansible, and Boto3. 
+  AWS CLI Version 2, Python 3, Ansible, and Boto3.
   Jenkins Server will run on Amazon Linux 2 EC2 Instance with
   custom security group allowing HTTP(80, 8080) and SSH (22) connections from anywhere.
 
@@ -59,7 +59,7 @@ Resources:
       IamInstanceProfile: !Ref JenkinsServerEC2Profile
       SecurityGroupIds:
         - !GetAtt JenkinsServerSecurityGroup.GroupId
-      Tags:                
+      Tags:
         - Key: Name
           Value: !Sub Jenkins Server of ${AWS::StackName}
         - Key: server
@@ -111,15 +111,15 @@ Resources:
           pip3 install ansible
           # install boto3
           pip3 install boto3
-          
+
 Outputs:
   JenkinsDNS:
-    Description: Jenkins Server DNS Name 
-    Value: !Sub 
+    Description: Jenkins Server DNS Name
+    Value: !Sub
       - ${PublicAddress}
       - PublicAddress: !GetAtt JenkinsServer.PublicDnsName
   JenkinsURL:
     Description: Jenkins Server URL
-    Value: !Sub 
+    Value: !Sub
       - http://${PublicAddress}:8080
       - PublicAddress: !GetAtt JenkinsServer.PublicDnsName

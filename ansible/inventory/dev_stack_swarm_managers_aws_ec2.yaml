@@ -7,7 +7,6 @@ filters:
   tag:environment: dev
   tag:swarm-role: manager
 hostnames:
-
   - "private-ip-address"
 
 compose:

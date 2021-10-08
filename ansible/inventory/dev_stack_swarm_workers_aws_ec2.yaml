@@ -8,7 +8,6 @@ filters:
   tag:swarm-role: worker
 
 hostnames:
-
   - "private-ip-address"
 
 compose:

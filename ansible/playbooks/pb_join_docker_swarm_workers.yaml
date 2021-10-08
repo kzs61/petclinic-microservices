@@ -1,5 +1,4 @@
 ---
-
 - hosts: role_grand_master
   tasks:
   - name: Get swarm join-token for workers
@@ -7,7 +6,7 @@
     register: join_command_for_workers
 
   - debug: msg='{{ join_command_for_workers.stdout.strip() }}'
-
+  
   - name: register grand_master with variable
     add_host:
       name: "grand_master"
@@ -20,4 +19,3 @@
     register: result_of_joining
 
   - debug: msg='{{ result_of_joining.stdout }}'
-

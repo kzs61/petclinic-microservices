@@ -2,7 +2,8 @@
 - hosts: all  # in all hosts
   tasks:
   - name: run dummy selenium job  # run this job in all hosts that are up and running
-    shell: "docker run --rm -v {{ workspace }}:{{ workspace }} -w {{ workspace }} callahanclarus/selenium-py-chrome:latest python {{ item }}"
+    shell: "docker run --rm -v {{ workspace }}:{{ workspace }} -w {{ workspace }} salihdocker/selenium-py-chrome/general:latest python {{ item }}"
+    # shell: "docker run --rm -v {{ workspace }}:{{ workspace }} -w {{ workspace }} callahanclarus/selenium-py-chrome:latest python {{ item }}"
         
     with_fileglob: "{{ workspace }}/selenium-jobs/dummy*.py"
     register: output

@@ -4,7 +4,7 @@ services:
   config-server:
     image: "${IMAGE_TAG_CONFIG_SERVER}"
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
      - 8888:8888
 
@@ -14,7 +14,7 @@ services:
       - config-server
     entrypoint: ["./dockerize","-wait=tcp://config-server:8888","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
      - 8761:8761
 
@@ -31,7 +31,7 @@ services:
      - discovery-server
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
     - 8081:8081
 
@@ -48,7 +48,7 @@ services:
      - discovery-server
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
      - 8082:8082
 
@@ -65,7 +65,7 @@ services:
      - discovery-server
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
      - 8083:8083
 
@@ -82,7 +82,7 @@ services:
      - discovery-server
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
      - 8080:8080
 
@@ -91,7 +91,7 @@ services:
     environment:
     - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -Djava.security.egd=file:/dev/./urandom
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
      - 9411:9411
 
@@ -102,7 +102,7 @@ services:
      - discovery-server
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
      - 9090:9090
 
@@ -113,7 +113,7 @@ services:
      - discovery-server
     entrypoint: ["./dockerize","-wait=tcp://discovery-server:8761","-timeout=60s","--","java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
      - 7979:7979
 
@@ -122,17 +122,17 @@ services:
   grafana-server:
     image: "${IMAGE_TAG_GRAFANA_SERVICE}"
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
     - 3000:3000
 
   prometheus-server:
     image: "${IMAGE_TAG_PROMETHEUS_SERVICE}"
     networks:
-      - clarusnet
+      - salih_netwok
     ports:
     - 9091:9090
 
 networks:
-  clarusnet:
+  salih_netwok:
     driver: overlay

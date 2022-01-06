@@ -8,7 +8,7 @@ pipeline {
         AWS_REGION="us-east-1"
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
         RANCHER_URL="https://rancher.kanalistanbul.life"
-        RANCHER_CONTEXT="c-vbpph:p-qbglz" 
+        RANCHER_CONTEXT="c-zfzv4:p-8bwqs" 
         RANCHER_CREDS=credentials('rancher-petclinic-credentials')
     }
     stages {
